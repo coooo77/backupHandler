@@ -1,0 +1,12 @@
+{
+  "cloudFolderPath": "C:/OneDrive/backup",
+  "backupFileConfigs": [
+    {
+      "filePath": "C:/configuration.json",
+      "deleteOriFile": true,
+      "overwrite": true,
+      "wildCard": "{year}{month}{day}_{hr}{min}{sec}_{oriName}",
+      "destinationDir": "C:/OneDrive/"
+    }
+  ]
+}

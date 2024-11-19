@@ -9,7 +9,10 @@ import { wilderCardHandler, moveFile } from './utils/helper'
 const { cloudFolderPath, backupFileConfigs } = config as Config
 
 async function mainProcess() {
-  if (backupFileConfigs.length === 0) return
+  if (backupFileConfigs.length === 0) {
+    console.log('No backup files exist, jobs done.')
+    return
+  }
 
   const isCloudFolderExist = await fs.existsSync(cloudFolderPath)
   if (!isCloudFolderExist) throw new Error('no cloud folder available')
@@ -17,7 +20,10 @@ async function mainProcess() {
   for (const config of backupFileConfigs) {
     const { wildCard, filePath, deleteOriFile, destinationDir, overwrite = true } = config
 
-    if (!fs.existsSync(filePath)) continue
+    if (!fs.existsSync(filePath)) {
+      console.warn(`Can not find source file: ${filePath}.`)
+      continue
+    }
 
     const shouldCreateDir = destinationDir && !fs.existsSync(destinationDir)
     if (shouldCreateDir) fs.mkdirSync(destinationDir, { recursive: true })
@@ -27,6 +33,8 @@ async function mainProcess() {
     const toPath = path.join(destinationDir || cloudFolderPath, `${exportName}${ext}`)
 
     if (!overwrite && fs.existsSync(toPath)) continue
+
+    console.log(`Move file: ${filePath} -> ${toPath}`)
     moveFile(filePath, toPath, deleteOriFile)
   }
 }
